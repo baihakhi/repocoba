@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue Coba coba</title>
+        <link="https=//fonts.googleapps.com/css?family=Quicksand&display=swap"
+         rel="stylesheet">
+        <style>
+            body {
+                margin: 5%;
+                font-family: 'Quicksand', sans-serif;
+            }
+            .active {
+                background: salmon;
+                border: 0;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id='app'>
+            <header>
+                <h1 v-if='qty>7'>{{ fullName }}</h1>
+                <h2 v-text='name'></h2>
+                <p><input type="text" v-model='name'></p>
+                <template v-if="kelas.length>2">
+                    <ul>
+                        <li v-for="(item, index) in kelas">{{ index+1 }}  {{item}}</li>
+                    </ul>
+                </template>
+                <p v-else>Kelas belum terisi</p>
+
+                <template v-if='qty>=3'>
+                    <ul>
+                        <li v-for="t in GG=='ganjil' ? printGanjil(angka) : printGenap(angka)">{{ t }}</li>
+                    </ul>
+                    <label><input type="checkbox" value="React" v-model="kelas"> React</label>
+                    <label><input type="checkbox" value="Vue.js" v-model="kelas"> Vue Js</label>
+                    <label><input type="checkbox" value="Angular" v-model="kelas"> Angular</label>
+                </template>
+                <div>
+                    <input type="radio" name="GG" id="ganjil" value="ganjil" v-model="GG">
+                    <label for="ganjil">Ganjil</label>
+                    <input type="radio" name="GG" id="genap" value="genap" v-model="GG">
+                    <label for="genap">Genap</label>
+                </div>
+                <p>
+                    <button v-on:click='tambahAngka(qty+1)'>tambah</button>
+                </p>
+                <img v-if='qty>1'v-bind:src='gambar' width="88">
+                <h4 v-html="link"></h4>
+                <p>soalan : {{ soal }}</p>
+                <p>jawaban  : {{ jawab }}</p>
+                <button v-bind:class="{active: menu === 'home'}" v-on:click="menu = 'home' ">Home</button>
+                <button v-bind:class="{active: menu === 'about'}" v-on:click="menu = 'about' ">About</button>
+                <button v-bind:class="{active: menu === 'blog'}" v-on:click="menu = 'blog' ">Blog</button>
+            </header>
+            
+        </div>
+        <div id="app2">
+            <ol>
+                <todo-item
+                    v-for="item in groceryList"
+                    v-bind:todo="item"
+                    v-bind:key="item.id"
+                ></todo-item>
+            </ol>
+        </div>
+        <footer id='footer'>
+            <p>copyright 2020</p>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+        <script>
+            Vue.component('todo-item',{
+                props: ['todo'],
+                template: '<li>{{ todo.text }}</li>'
+            })
+            var app7 = new Vue({
+                el: '#app2',
+                data: {
+                    groceryList: [
+                    { id: 0, text: 'Vegetables' },
+                    { id: 1, text: 'Cheese' },
+                    { id: 2, text: 'Whatever else humans are supposed to eat' }
+                    ]
+                }
+            })
+            const member = {
+                name : 'Dorami Fasulsi',
+                pesan : 'Hello World',
+                qty : 1,
+                firstName : 'Zaenal',
+                lastName : 'Arifin',
+                link : '<a href="google.com">kelas baru join</a>',
+                gambar : 'image/gambar.jpeg',
+                menu : 'home',
+                kelas : [],
+                angka : [1],
+                GG : 'ganjil'
+            }
+            const vm = new Vue({
+                el:'#app',
+                data : member,
+                methods:{
+                    getQty: function(){
+                        return this.qty
+                    },
+                    ubahNama: function(namaBaru){
+                        this.name = namaBaru
+                    },
+                    dependGambar:function(){
+                        
+                        a = this.qty
+                        b = a%2
+                        if (b != 0) {
+                            this.gambar = "image/gambar.jpeg"
+                        } else {
+                            this.gambar = "gambar1.jpeg"
+                        }
+                    },
+                    tambahAngka: function(x) {
+                        this.angka.push(x)
+                        console.log(this.angka,this.GG,)
+                        this.qty++
+                        this.dependGambar()
+                    },
+                    printGenap: function(data){
+                            return data.filter(angka => {
+                                return angka % 2 == 0
+                                
+                        })
+                    },
+                    printGanjil: function(data){
+                            return data.filter(angka => {
+                                return angka % 2 != 0
+                                
+                        })
+                    }
+                    
+                },
+                computed:{
+                    soal:function(){
+                        return this.qty
+                    },
+                    jawab:function(){
+                        return this.qty%2 == 0 ? "genap" : "ganjil"
+                    },
+                    fullName: function(){
+                        return this.firstName + " " + this.lastName
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
